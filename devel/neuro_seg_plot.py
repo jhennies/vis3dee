@@ -33,21 +33,7 @@ class NeuroSegPlot():
             line_width=5
         )
 
-        # path_image = np.zeros(seg_image.shape)
-        # print path_image.shape
-        # path_image[5, 10:20, 10] = 1
-        # path_image[5, 20, 11:15] = 1
-        # import processing_lib as lib
-        #
-        # path_image = lib.resize(path_image, [10, 1, 1], mode='nearest')
-        # # path_image = medfilt(path_image, kernel_size=9)
-        # pth = mlab.pipeline.scalar_field(path_image)
-        # mlab.pipeline.iso_surface(
-        #     pth, contours=2,
-        #     color=(1, 1, 1),
-        # )
-
-        # Object of the segmentation ----------------------------------------------
+        # Objects of the segmentation ----------------------------------------------
         print np.unique(seg_image)
 
         for i in np.unique(seg_image):
@@ -129,7 +115,7 @@ if __name__ == '__main__':
     opacity = 0.25
     label = '118'
     pathid = '1'
-    surface_source = 'seg'
+    surface_source = 'gt'
 
     # Specify the files
     raw_path = '/mnt/localdata02/jhennies/neuraldata/cremi_2016/'
