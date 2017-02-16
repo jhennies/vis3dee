@@ -13,6 +13,84 @@ class NeuroSegPlot():
     def path_in_segmentation(self):
         pass
 
+    @staticmethod
+    def start_figure():
+        mlab.figure(bgcolor=(0, 0, 0))
+
+    @staticmethod
+    def add_path(path, anisotropy=[1, 1, 1]):
+        # Plot the path -----------------------------------------------------------
+        mlab.plot3d(
+            path[0] * anisotropy[0],
+            path[1] * anisotropy[1],
+            path[2] * anisotropy[2],
+            representation='wireframe',
+            color=(1, 0, 0),
+            line_width=5
+        )
+
+    @staticmethod
+    def add_xyz_planes(image, anisotropy=[1, 1, 1], threshold=None, colormap='black-white'):
+        # Raw data planes ---------------------------------------------------------
+        src = mlab.pipeline.scalar_field(image)
+
+        # Our data is not equally spaced in all directions:
+        src.spacing = anisotropy
+        src.update_image_data = True
+
+        if threshold is not None:
+            src = mlab.pipeline.threshold(src, **threshold)
+
+        cut_plane = mlab.pipeline.scalar_cut_plane(src,
+                                                   plane_orientation='x_axes',
+                                                   colormap=colormap,
+                                                   vmin=None,
+                                                   vmax=None)
+        cut_plane.implicit_plane.origin = (5, 0, 0)
+        # cut_plane.implicit_plane.widget.enabled = False
+        #
+        cut_plane2 = mlab.pipeline.scalar_cut_plane(src,
+                                                    plane_orientation='y_axes',
+                                                    colormap=colormap,
+                                                    vmin=None,
+                                                    vmax=None)
+        cut_plane2.implicit_plane.origin = (0, 2, 0)
+        # cut_plane2.implicit_plane.widget.enabled = False
+
+        cut_plane3 = mlab.pipeline.scalar_cut_plane(src,
+                                                    plane_orientation='z_axes',
+                                                    colormap=colormap,
+                                                    vmin=None,
+                                                    vmax=None)
+        cut_plane3.implicit_plane.origin = (0, 0, 2)
+        # cut_plane3.implicit_plane.widget.enabled = False
+
+    @staticmethod
+    def add_iso_surfaces(image, anisotropy=[1, 1, 1], colormap=None, color=None):
+
+        for i in np.unique(image):
+
+            if i == 0:
+                continue
+
+            # The surface of the selected segmentation object
+            t_image = np.array(image)
+            t_image[image != i] = 0
+            obj = mlab.pipeline.scalar_field(t_image)
+            t_image = None
+
+            # Resize possibility no. two
+            obj.spacing = anisotropy
+            obj.update_image_data = True
+
+            mlab.pipeline.iso_surface(
+                obj, contours=[i],
+                colormap=colormap,
+                color=color,
+                opacity=0.3,
+                vmin=0, vmax=np.unique(image)[-1]
+            )
+
     def path_in_segmentation_data_bg(self, raw_image, seg_image, path):
         """
         :param raw_image: np.ndarray data used for background
@@ -99,7 +177,8 @@ class NeuroSegPlot():
         # mlab.show()
         self.show()
 
-    def show(self):
+    @staticmethod
+    def show():
         mlab.show()
 
 
@@ -113,9 +192,10 @@ if __name__ == '__main__':
     interpolation_mode = 'nearest'
     transparent = True
     opacity = 0.25
-    label = '118'
+    # label = '118'
+    label = '32'
     pathid = '1'
-    surface_source = 'gt'
+    surface_source = 'seg'
 
     # Specify the files
     raw_path = '/mnt/localdata02/jhennies/neuraldata/cremi_2016/'
