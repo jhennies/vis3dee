@@ -267,8 +267,9 @@ class NeuroSegPlot():
                     custom_lut=custom_lut
                 )
 
+    @staticmethod
     def plot_multiple_paths_with_mean_class(
-            self, paths, classes,
+            paths, classes,
             custom_lut=None,
             colormap='Spectral',
             representation='wireframe',
@@ -277,7 +278,7 @@ class NeuroSegPlot():
             anisotropy=[1, 1, 1]
     ):
 
-        sub_paths = self.multiple_paths_for_plotting(paths, classes)
+        sub_paths = NeuroSegPlot.multiple_paths_for_plotting(paths, classes)
 
         for key, spaths in sub_paths.iteritems():
 
@@ -285,7 +286,7 @@ class NeuroSegPlot():
 
             for path in spaths:
 
-                self.add_path(
+                NeuroSegPlot.add_path(
                     path,
                     s=[mean_class] * len(path[0]),
                     anisotropy=anisotropy,

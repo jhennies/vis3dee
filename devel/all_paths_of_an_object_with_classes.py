@@ -142,6 +142,19 @@ if __name__ == '__main__':
 
     lut = nsp.lut_from_colormap(cdict_BlYlRd, 256)
 
+    # Groundtruth iso surface and path prediction classes
+    nsp.start_figure()
+    nsp.add_iso_surfaces(gt_image, anisotropy=anisotropy, colormap='Spectral',
+                         vmin=np.unique(gt_image)[1], vmax=np.unique(gt_image)[-1])
+    nsp.add_xyz_planes(raw_image, anisotropy=anisotropy)
+    nsp.plot_multiple_paths_with_mean_class(
+        paths, classes_pred,
+        custom_lut=lut,
+        vmin=0, vmax=1,
+        anisotropy=anisotropy
+    )
+
+    # Groundtruth iso surface and path training classes
     gt_figure = nsp()
     gt_figure.start_figure()
     gt_figure.add_iso_surfaces(gt_image, anisotropy=anisotropy, colormap='Spectral',
@@ -154,6 +167,7 @@ if __name__ == '__main__':
         anisotropy=anisotropy
     )
 
+    # Segmentation iso surface and paths with groundtruth label
     seg_figure = nsp()
     seg_figure.start_figure()
     seg_figure.add_iso_surfaces(seg_image, anisotropy=anisotropy, color=(0.3, 0.5, 0.6))
@@ -162,3 +176,4 @@ if __name__ == '__main__':
     seg_figure.add_multiple_paths(sub_paths, colormap='Spectral', anisotropy=anisotropy,
                                   vmin=np.unique(gt_image)[1], vmax=np.unique(gt_image)[-1])
     seg_figure.show()
+
