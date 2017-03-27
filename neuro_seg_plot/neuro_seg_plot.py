@@ -275,14 +275,18 @@ class NeuroSegPlot():
             representation='wireframe',
             line_width=5,
             vmin=0, vmax=1,
-            anisotropy=[1, 1, 1]
+            anisotropy=[1, 1, 1],
+            method='mean'
     ):
 
         sub_paths = NeuroSegPlot.multiple_paths_for_plotting(paths, classes)
 
         for key, spaths in sub_paths.iteritems():
 
-            mean_class = np.mean([x[1] for x in key])
+            if method == 'mean':
+                mean_class = np.mean([x[1] for x in key])
+            else:
+                mean_class = method([x[1] for x in key])
 
             for path in spaths:
 
