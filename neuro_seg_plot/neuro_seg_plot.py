@@ -6,10 +6,16 @@ import sys
 from collections import OrderedDict as Odict
 
 
+
+
 class NeuroSegPlot():
+
+
 
     def __init__(self):
         pass
+
+
 
     def path_in_segmentation(self):
         pass
@@ -17,6 +23,7 @@ class NeuroSegPlot():
     @staticmethod
     def start_figure():
         mlab.figure(bgcolor=(0, 0, 0))
+
 
     @staticmethod
     def add_path(path, s=None, anisotropy=[1, 1, 1],
@@ -41,6 +48,10 @@ class NeuroSegPlot():
 
         if len(path) > 3:
             s = path[3]
+
+        # FIXME Why does plotting not work for np.int64?
+        if path.dtype == np.int64:
+            path = path.astype(np.uint32)
 
         # Plot the path -----------------------------------------------------------
         if s is not None:
@@ -135,7 +146,24 @@ class NeuroSegPlot():
 
     @staticmethod
     def show():
+
         mlab.show()
+
+    @staticmethod
+    @mlab.animate(delay=10)
+    def anim():
+        f = mlab.gcf()
+        while 1:
+            f.scene.camera.azimuth(0.1)
+            f.scene.render()
+            yield
+
+    @staticmethod
+    def movie_show():
+
+        a = NeuroSegPlot.anim()
+        mlab.show(stop=True)
+
 
     @staticmethod
     def lut_from_colormap(cmap_dict, color_resolution=256):
