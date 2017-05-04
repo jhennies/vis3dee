@@ -71,7 +71,10 @@ class NeuroSegPlot():
             )
 
     @staticmethod
-    def add_xyz_planes(image, anisotropy=[1, 1, 1], threshold=None, colormap='black-white'):
+    def add_xyz_planes(
+            image, anisotropy=[1, 1, 1], threshold=None, colormap='black-white',
+            xpos=5, ypos=2, zpos=2
+    ):
         # Raw data planes ---------------------------------------------------------
         src = mlab.pipeline.scalar_field(image)
 
@@ -87,7 +90,7 @@ class NeuroSegPlot():
                                                    colormap=colormap,
                                                    vmin=None,
                                                    vmax=None)
-        cut_plane.implicit_plane.origin = (5, 0, 0)
+        cut_plane.implicit_plane.origin = (xpos, 0, 0)
         # cut_plane.implicit_plane.widget.enabled = False
         #
         cut_plane2 = mlab.pipeline.scalar_cut_plane(src,
@@ -95,7 +98,7 @@ class NeuroSegPlot():
                                                     colormap=colormap,
                                                     vmin=None,
                                                     vmax=None)
-        cut_plane2.implicit_plane.origin = (0, 2, 0)
+        cut_plane2.implicit_plane.origin = (0, ypos, 0)
         # cut_plane2.implicit_plane.widget.enabled = False
 
         cut_plane3 = mlab.pipeline.scalar_cut_plane(src,
@@ -103,7 +106,7 @@ class NeuroSegPlot():
                                                     colormap=colormap,
                                                     vmin=None,
                                                     vmax=None)
-        cut_plane3.implicit_plane.origin = (0, 0, 2)
+        cut_plane3.implicit_plane.origin = (0, 0, zpos)
         # cut_plane3.implicit_plane.widget.enabled = False
 
     @staticmethod
